@@ -6,7 +6,7 @@ from sensor_msgs.msg import Joy
 from numpy import*
 from rclpy.node import Node
 import numpy as np
-# hola
+
 class Simple_Drive(Node):
     def __init__(self):
         super().__init__('simple_drive_teleop')
