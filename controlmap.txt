@@ -1,5 +1,6 @@
 //programar botones faltantes
 //checar angulos muertos del joystick [0][1] para que no se interfieran
+//float64
 
 Axis:
 [0] Joy left en y   //Falta publicar angulo float 64
@@ -23,4 +24,3 @@ Button:
 [8] xbox Button    //no relevante
 [9] Joy left button    //no relevante
 [10] Joy right button     //no relevante
-
