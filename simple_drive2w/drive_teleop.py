@@ -1,7 +1,7 @@
 import rclpy
 from math import *
 from std_msgs.msg import *
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, Quaternion
 from sensor_msgs.msg import Joy
 from numpy import*
 from rclpy.node import Node
@@ -12,7 +12,7 @@ class Simple_Drive(Node):
         super().__init__('simple_drive_teleop')
         
         self.publisher_vel = self.create_publisher(Twist, 'cmd_vel', 10)
-        #self.publisher_angl = self.create_publisher(Float64, 'angulos', 10)
+        self.publisher_angl = self.create_publisher(Quaternion, 'angulos', 10)
         self.timer=self.create_timer(0.05,self.control)
         self.subscriber_joy = self.create_subscription(Joy,"joy", self.callbackjoy,10)
 
@@ -20,6 +20,12 @@ class Simple_Drive(Node):
         self.velocity=0.33
         self.twist=Twist()
         self.deathZone = 0.3
+        self.angles = Quaternion()
+
+        self.angles.x = 0.0
+        self.angles.y = 0.0
+        self.angles.z = 0.0
+        self.angles.w = 0.0
 
         self.axes[1] 
 
@@ -54,7 +60,7 @@ class Simple_Drive(Node):
         elif self.buttons[0]:
             self.velocity=0.33
         
-        elif self.axes[1]>=self.deathZone or self.axes[1]<=-self.deathZone:
+        elif (self.axes[1]>=self.deathZone or self.axes[1]<=-self.deathZone) and (self.axes[0] == 0):
             self.twist.linear.x=calcVel(self.axes[1])*self.velocity
             #print(self.twist)
         
@@ -68,7 +74,8 @@ class Simple_Drive(Node):
             self.twist.angular.z=0.0
         
         self.publisher_vel.publish(self.twist)
-        print("Twist publicado")#xd
+        self.publisher_angl.publish(self.angles)
+        #print("Twist publicado")#xd
             
 
 def main(args=None):
